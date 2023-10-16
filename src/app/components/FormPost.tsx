@@ -3,12 +3,42 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormInputProps } from "../types";
+import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Class } from "@prisma/client";
 
 const FormPost = () => {
 	const { register, handleSubmit } = useForm<FormInputProps>();
 	const handleCheckIn: SubmitHandler<FormInputProps> = (data) => {
-		console.log(data);
+		checkInStudent(data);
 	};
+
+	const { mutate: checkInStudent, isLoading } = useMutation({
+		mutationFn: (newStudent: FormInputProps) => {
+			console.log(newStudent)
+			return axios.post("/api/students/create", newStudent);
+		},
+		onError: (error) => {
+			alert(
+				"There was a problem checking you in, please check in manually"
+			);
+			console.log(error)
+		},
+		onSuccess: () => {
+			alert("Successfully checked in");
+		},
+	});
+
+	// fetch list of classes
+	const { data: dataClasses, isLoading: isLoadingClasses } = useQuery<
+		Class[]
+	>({
+		queryKey: ["classes"],
+		queryFn: async () => {
+			const response = await axios.get("/api/classes");
+			return response.data;
+		},
+	});
 
 	return (
 		<form
@@ -29,19 +59,24 @@ const FormPost = () => {
 				className="py-2 w-full bg-slate-200 rounded text-center"
 				placeholder="lm10"
 			/>
-			<select
-				{...register("class", { required: true })}
-				className="py-2 w-full bg-slate-200 rounded text-center mt-5"
-				defaultValue={""}
-			>
-				<option disabled value={""}>
-					Class:
-				</option>
-				<option>Calc 1</option>
-				<option>Calc 2</option>
-				<option>Computer Science I</option>
-				<option>Computer Science II</option>
-			</select>
+			{!isLoadingClasses ? (
+				<select
+					{...register("classId", { required: true })}
+					className="py-2 w-full bg-slate-200 rounded text-center mt-5"
+					defaultValue={""}
+				>
+					<option disabled value={""}>
+						Class:
+					</option>
+					{dataClasses?.map((item) => (
+						<option key={item.id} value={item.id}>
+							{item.classname}
+						</option>
+					))}
+				</select>
+			) : (
+				<span className="loading loading-spinner loading-md mt-5"></span>
+			)}
 			<button
 				type="submit"
 				className="bg-[#b5a369] text-white text-lg font-semibold px-5 py-1 rounded-lg mt-10"
