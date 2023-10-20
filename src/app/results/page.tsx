@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 import React from "react";
+import { DataTable } from "./DataTable";
+import { columns } from "./Columns";
 
 interface Props {}
 
@@ -11,6 +13,7 @@ async function getStudents() {
 			username: true,
 			createdAt: true,
 			Class: true,
+			classId: true
 		},
 		orderBy: {
 			createdAt: "desc",
@@ -22,20 +25,9 @@ async function getStudents() {
 const page = async (props: Props) => {
 	const students = await getStudents();
 	return (
-		<pre>
-			{students.map((item) => (
-				<div key={item.id}>
-					<br />
-					{/* <p>{item.createdAt}</p> */}
-					<br />
-					{item.fullname}
-					<br />
-					{item.username}
-					<br />
-					{item.Class?.classname}
-				</div>
-			))}
-		</pre>
+		<div className="container mx-auto py-10">
+			<DataTable columns={columns} data={students} />
+		</div>
 	);
 };
 

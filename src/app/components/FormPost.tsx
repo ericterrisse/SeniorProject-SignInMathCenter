@@ -15,7 +15,6 @@ const FormPost = () => {
 
 	const { mutate: checkInStudent, isLoading } = useMutation({
 		mutationFn: (newStudent: FormInputProps) => {
-			console.log(newStudent);
 			return axios.post("/api/students/create", newStudent);
 		},
 		onError: (error) => {
