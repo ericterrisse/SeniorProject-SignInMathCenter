@@ -15,14 +15,14 @@ const FormPost = () => {
 
 	const { mutate: checkInStudent, isLoading } = useMutation({
 		mutationFn: (newStudent: FormInputProps) => {
-			console.log(newStudent)
+			console.log(newStudent);
 			return axios.post("/api/students/create", newStudent);
 		},
 		onError: (error) => {
 			alert(
 				"There was a problem checking you in, please check in manually"
 			);
-			console.log(error)
+			console.log(error);
 		},
 		onSuccess: () => {
 			alert("Successfully checked in");

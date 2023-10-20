@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 			data: {
 				fullname: body.fullname,
 				username: body.username,
-				class: body.classId,
+				Class: body.classId,
 			},
 		});
 		return NextResponse.json(student, { status: 200 });

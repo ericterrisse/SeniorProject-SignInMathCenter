@@ -21,7 +21,6 @@ model Student {
   fullname  String   @db.VarChar(100)
   username  String   @db.VarChar(100)
   createdAt DateTime @default(now())
-  class     String
   Class     Class?   @relation(fields: [classId], references: [id])
   classId   String?
 }
