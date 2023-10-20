@@ -9,8 +9,8 @@ async function getStudents() {
 			id: true,
 			fullname: true,
 			username: true,
-            createdAt: true,
-			Class: true
+			createdAt: true,
+			Class: true,
 		},
 		orderBy: {
 			createdAt: "desc",
@@ -24,7 +24,7 @@ const page = async (props: Props) => {
 	return (
 		<pre>
 			{students.map((item) => (
-				<div>
+				<div key={item.id}>
 					<br />
 					{/* <p>{item.createdAt}</p> */}
 					<br />
@@ -32,7 +32,7 @@ const page = async (props: Props) => {
 					<br />
 					{item.username}
 					<br />
-					{item.Class.classname}
+					{item.Class?.classname}
 				</div>
 			))}
 		</pre>
