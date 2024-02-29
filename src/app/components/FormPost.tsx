@@ -18,9 +18,7 @@ const FormPost = () => {
 			return axios.post("/api/students/create", newStudent);
 		},
 		onError: (error) => {
-			alert(
-				"There was a problem checking you in, please check in manually"
-			);
+			alert("There was a problem checking you in, please check in manually");
 			console.log(error);
 		},
 		onSuccess: () => {
@@ -29,9 +27,7 @@ const FormPost = () => {
 	});
 
 	// fetch list of classes
-	const { data: dataClasses, isLoading: isLoadingClasses } = useQuery<
-		Class[]
-	>({
+	const { data: dataClasses, isLoading: isLoadingClasses } = useQuery<Class[]>({
 		queryKey: ["classes"],
 		queryFn: async () => {
 			const response = await axios.get("/api/classes");
@@ -49,14 +45,14 @@ const FormPost = () => {
 				type="text"
 				{...register("fullname", { required: true })}
 				className="py-2 w-full bg-slate-200 rounded text-center"
-				placeholder="Lionel Messi"
+				placeholder="Full name"
 			/>
 			<h3 className="self-start mt-3">Student username:</h3>
 			<input
 				type="text"
 				{...register("username", { required: true })}
 				className="py-2 w-full bg-slate-200 rounded text-center"
-				placeholder="lm10"
+				placeholder="fn10"
 			/>
 			{!isLoadingClasses ? (
 				<select
