@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormInputProps } from "../types";
+import io from "socket.io-client"; // Import socket.io-client
 
-const ws = new WebSocket('ws://localhost:8080');
-
+const socket = io("http://localhost:8080");
 
 
 const FormPost = () => {
@@ -36,19 +36,18 @@ const FormPost = () => {
     }
   
     useEffect(() => {
-      const handleWebSocketMessage = (event: MessageEvent) => {
-        console.log('Received message from server:', event.data);
-        if (event.data === 'reload') {
-          getDataAndUpdateTextBoxes();
-        }
-      };
-  
-      ws.addEventListener('message', handleWebSocketMessage);
-  
-      return () => {
-        // Cleanup function to remove the event listener when the component is unmounted
-        ws.removeEventListener('message', handleWebSocketMessage);
-      };
+        const handleSocketMessage = (data: string) => { // Adjust the function to handle Socket.IO data
+            console.log('Received message from server:', data);
+            if (data === 'reload') {
+                getDataAndUpdateTextBoxes();
+            }
+        };
+
+        socket.on('message', handleSocketMessage); // Listen for 'message' event from the server
+
+        return () => {
+            socket.off('message', handleSocketMessage); // Remove the event listener when unmounting
+        };
     }, []);
   const onSubmit: SubmitHandler<FormInputProps> = async (data) => {
       try {
