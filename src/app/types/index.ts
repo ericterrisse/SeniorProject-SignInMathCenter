@@ -1,5 +1,5 @@
 export type FormInputProps = {
 	fullname: string,
-	username: string,
+	studentId: string,
 	classId: string,
 };

@@ -1,8 +1,10 @@
 "use client"
-
 import FormPost from "./components/FormPost";
 import { SubmitHandler } from "react-hook-form";
 import { FormInputProps } from "./types";
+
+
+
 
 export default function Home() {
 	return (
