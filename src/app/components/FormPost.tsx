@@ -1,4 +1,6 @@
+
 import React, {useState,useEffect} from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 //import { useHistory } from 'react-router-dom';
 import axios from "axios";
@@ -6,7 +8,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormInputProps } from "../types";
 import io from "socket.io-client"; // Import socket.io-client
 
-const socket = io("http://localhost:8080");
+const socket = io("https://snrprj-ws-83f3f1b648a2.herokuapp.com/");
 
 
 const FormPost = () => {
@@ -49,6 +51,7 @@ const FormPost = () => {
             socket.off('message', handleSocketMessage); // Remove the event listener when unmounting
         };
     }, []);
+
   const onSubmit: SubmitHandler<FormInputProps> = async (data) => {
       try {
           console.log(data);//show posted data
@@ -71,9 +74,10 @@ const FormPost = () => {
       className="flex flex-col items-center mx-20 gap-2">
         <h3 className="self-start">Name and last name:</h3>
         <input
+
             id="name"
             type="text"
-            value={uData.name}
+            defaultValue={uData.name}
             className="py-2 w-full bg-slate-200 rounded text-center"
             placeholder="Full name"
             {...register("fullname", { required: true })}
@@ -81,9 +85,10 @@ const FormPost = () => {
         {errors.fullname && <span className="text-red-500">Full name is required</span>}
         <h3 className="self-start mt-3">Student ID:</h3>
         <input
+
             id="studentId"
             type="text"
-            value={uData.sId}
+            defaultValue={uData.sId}
             className="py-2 w-full bg-slate-200 rounded text-center"
             placeholder="fn10"
             {...register("studentId", { required: true })}
