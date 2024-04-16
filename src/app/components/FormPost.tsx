@@ -7,7 +7,7 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormInputProps } from "../types";
 
-const ws = new WebSocket('ws://localhost:8080');
+const ws = new WebSocket('https://snrprj-ws-83f3f1b648a2.herokuapp.com/');
 
 
 
