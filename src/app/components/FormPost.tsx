@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormInputProps } from "../types";
 import io from "socket.io-client"; // Import socket.io-client
 
-const socket = io("https://snrprj-ws-83f3f1b648a2.herokuapp.com/");
+const socket = io("https://msc-backend-rouge.vercel.app/");
 
 
 const FormPost = () => {
