@@ -78,7 +78,7 @@ const FormPost = () => {
 
             id="name"
             type="text"
-            value={uData.name}
+            defaultValue={uData.name}
             className="py-2 w-full bg-slate-200 rounded text-center"
             placeholder="Full name"
             {...register("fullname", { required: true })}
@@ -89,8 +89,7 @@ const FormPost = () => {
 
             id="studentId"
             type="text"
-            value={uData.sId}
-
+            defaultValue={uData.sId}
             className="py-2 w-full bg-slate-200 rounded text-center"
             placeholder="fn10"
             {...register("studentId", { required: true })}
