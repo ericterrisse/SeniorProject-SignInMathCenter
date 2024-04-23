@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 
+
 const FormPost = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [uData, setData] = useState({ name: "", sId: "" });
