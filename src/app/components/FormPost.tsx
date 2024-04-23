@@ -1,62 +1,62 @@
-
-import React, {useState,useEffect} from "react";
-
+import React, { useState, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-//import { useHistory } from 'react-router-dom';
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { FormInputProps } from "../types";
-import io from "socket.io-client"; // Import socket.io-client
-
-const socket = io("https://snrprj-ws-83f3f1b648a2.herokuapp.com/");
 
 
 const FormPost = () => {
-    
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const ini ={name:"",sId:""}
-    const [uData, setData] = useState(ini);
+    const [uData, setData] = useState({ name: "", sId: "" });
 
     useEffect(() => {
         console.log('Updated uData:', uData);
+    }, [uData]);
 
-      }, [uData]);
-  
-    const getDataAndUpdateTextBoxes = () => {
-        fetch('http://localhost:3006/getData')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Received data:', data);
-
-                setData(data); // Update state with the fetched data
-                if (data.name == '') {
-                    alert("There is no user");
-                }
-
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-  
     useEffect(() => {
-        const handleSocketMessage = (data: string) => { // Adjust the function to handle Socket.IO data
-            console.log('Received message from server:', data);
-            if (data === 'reload') {
+        const eventSource = new EventSource('https://snr-backend-47098f3570d9.herokuapp.com/sse');
+
+        eventSource.onmessage = (event) => {
+            const eventData = event.data;
+            console.log('Received SSE message:', eventData);
+
+            if (eventData === 'Reload') {
                 getDataAndUpdateTextBoxes();
             }
         };
 
-        socket.on('message', handleSocketMessage); // Listen for 'message' event from the server
+        eventSource.onerror = (error) => {
+            console.error('SSE Error:', error);
+        };
 
         return () => {
-            socket.off('message', handleSocketMessage); // Remove the event listener when unmounting
+            eventSource.close();
         };
     }, []);
+
+    const getDataAndUpdateTextBoxes = () => {
+        axios.get('https://snr-backend-47098f3570d9.herokuapp.com/getData')
+            .then(response => {
+                console.log('Received data:', response.data);
+
+                setData(response.data); // Update state with the fetched data
+                if (response.data.name === "") {
+                    alert("There is no user");
+                    window.location.reload();
+                    setData({ name: "", sId: "" })
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    };
+
 
   const onSubmit: SubmitHandler<FormInputProps> = async (data) => {
       try {
           console.log(data);//show posted data
-          const response = await axios.post('http://localhost:3006/api/catch', data);
+          const response = await axios.post('https://snr-backend-47098f3570d9.herokuapp.com/api/catch', data);
           console.log(response.data);
+          window.location.reload();
+          setData({ name: "", sId: "" })
           //add user success message, do some type of redirect
       }catch (error) {
           console.error('Error posting data:', error);
